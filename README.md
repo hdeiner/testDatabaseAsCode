@@ -21,40 +21,52 @@ https://geraldonit.com/2018/03/19/manually-installing-a-maven-artifact-in-your-l
 
 Some statistics:
 
+```bash
 local performance
 ROWS_IN_A_COMMIT = 10000
 data/name.basics.tsv - 0% complete - elapsed time = 0:35 - remaining time = 531:02
 data/name.basics.tsv - 1% complete - elapsed time = 4:46 - remaining time = 467:39
 data/name.basics.tsv - 2% complete - elapsed time = 9:20 - remaining time = 452:59
-
+```
+```bash
 ROWS_IN_A_COMMIT = 75000
 data/name.basics.tsv - 0% complete - elapsed time = 3:58 - remaining time = 467:45
 data/name.basics.tsv - 1% complete - elapsed time = 7:51 - remaining time = 458:23
 data/name.basics.tsv - 2% complete - elapsed time = 11:36 - remaining time = 448:07
+```
 
+```bash
 ROWS_IN_A_COMMIT = 75000 / DATABASE REMOVED  NOTICE THE 50000% PERFORMANCE PENALTY OF ORACLE!!!
 data/name.basics.tsv - 0% complete - elapsed time = 0:00 - remaining time = 1:49
 data/name.basics.tsv - 1% complete - elapsed time = 0:01 - remaining time = 1:06
 data/name.basics.tsv - 2% complete - elapsed time = 0:01 - remaining time = 0:56
+```
 
+```bash
 r5.2xlarge	8	38	64 GiB	EBS Only	$0.504 per Hour
 ROWS_IN_A_COMMIT = 10000
 data/name.basics.tsv - 0% complete - elapsed time = 0:26 - remaining time = 391:09
 data/name.basics.tsv - 1% complete - elapsed time = 3:08 - remaining time = 307:43
 data/name.basics.tsv - 2% complete - elapsed time = 6:11 - remaining time = 300:33
+```
 
+```bash
 r5d.4xlarge	16	71	128 GiB	2 x 300 NVMe SSD	$1.152 per Hour
 ROWS_IN_A_COMMIT = 10000
 data/name.basics.tsv - 0% complete - elapsed time = 0:24 - remaining time = 365:54
 data/name.basics.tsv - 1% complete - elapsed time = 2:49 - remaining time = 277:06
 data/name.basics.tsv - 2% complete - elapsed time = 5:31 - remaining time = 268:00
+```
 
+```bash
 c5d.9xlarge	36	141	72 GiB	1 x 900 NVMe SSD	$1.728 per Hour
 ROWS_IN_A_COMMIT = 10000
 data/name.basics.tsv - 0% complete - elapsed time = 0:20 - remaining time = 301:25
 data/name.basics.tsv - 1% complete - elapsed time = 2:23 - remaining time = 234:21
 data/name.basics.tsv - 2% complete - elapsed time = 4:44 - remaining time = 229:48
+```
 
+```bash
 DEMO_MODE LOCAL RESULTS
 ROWS_IN_A_COMMIT = 10000
 data/name.basics.tsv - 11% complete - elapsed time = 0:41 - remaining time = 5:26
@@ -118,4 +130,4 @@ data/title.principals.tsv - 95% complete - elapsed time = 2:52 - remaining time 
 data/title.principals.tsv - 98% complete - elapsed time = 2:59 - remaining time = 0:02
 data/title.principals.tsv - 100% complete - elapsed time = 3:01 - remaining time = 0:00
 data/title.ratings.tsv - 100% complete - elapsed time = 0:04 - remaining time = 0:00
-
+```
