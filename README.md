@@ -30,7 +30,7 @@ sudo ./buildDockerImage.sh -v 11.2.0.2 -x
 ```
 
 First, there is a local build of the Oracle database and it's schema.  This is pushed to DockerHub.
-``bash
+```bash
 howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode$ ./buildDockerDatabase.sh 
 Stop current IMDB Docker container
 [sudo] password for howarddeiner: IMDB
@@ -113,7 +113,7 @@ Create the database loader that will run in an EC2
 [INFO] Finished at: 2018-11-08T13:15:37-05:00
 [INFO] Final Memory: 32M/604M
 [INFO] ------------------------------------------------------------------------
-````
+```
 
 Then, we Terraform the load environment, where the database is brought in from DockerHub, the files are processed, and a new image is pushed to DockerHub.
 ```bash
@@ -143,7 +143,7 @@ schema      889 MB           2 hours ago
 
 We can then pull that image and do our work.
 
-``bash
+```bash
 howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode/terraform$ sudo -S <<< "password" docker run -d -p 1521:1521 -p 8081:8080 -e ORACLE_ALLOW_REMOTE=true -e ORACLE_PWD=oracle -v /u01/app/oracle/oradata --shm-size=4G --name IMDB howarddeiner/imdb:dataloaded
 b49e8588b3dabdc96112194b05b25c95fb0a7067b2b9f76795001330ef203788
 
@@ -163,7 +163,7 @@ SQL> select count(*) from title where primaryTitle like '%Fight%';
 ----------
        230
 
-``
+```
 
 
 Some statistics:
