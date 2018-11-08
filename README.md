@@ -113,7 +113,7 @@ Create the database loader that will run in an EC2
 [INFO] Finished at: 2018-11-08T13:15:37-05:00
 [INFO] Final Memory: 32M/604M
 [INFO] ------------------------------------------------------------------------
-``
+````
 
 Then, we Terraform the load environment, where the database is brought in from DockerHub, the files are processed, and a new image is pushed to DockerHub.
 ```bash
