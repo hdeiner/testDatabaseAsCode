@@ -19,6 +19,121 @@ The processing was done on an r5.2xlarge instance.  It has 8 vCPUs, 38 ECUs, 64 
 Taking care of the propriety non Maven Repository ojdbc jar
 https://geraldonit.com/2018/03/19/manually-installing-a-maven-artifact-in-your-local-repository/
 
+Docker Oracle image was from the Oracle GitHub project (https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md) locally in
+```bash
+~/oracle-docker-images/OracleDatabase/SingleInstance/dockerfiles
+```
+
+using 
+```bash
+sudo ./buildDockerImage.sh -v 11.2.0.2 -x
+```
+
+First, there is a local build of the Oracle database and it's schema.  This is pushed to DockerHub.
+``bash
+howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode$ ./buildDockerDatabase.sh 
+Stop current IMDB Docker container
+[sudo] password for howarddeiner: IMDB
+Remove current IMDB Docker container
+IMDB
+Create a fresh Docker IMDB container
+Starting oracle/database:11.2.0.2-xe in Docker container
+9e31505c38a253d4c5c13be9ad045bf25a69303c2520efcc2e22fc6c69664ad6
+Pause a minute to allow Oracle to start up
+Install Schema
+Starting Liquibase at Thu, 08 Nov 2018 12:51:05 EST (version 3.6.1 built at 2018-04-11 08:41:04)
+Liquibase: Update has been successful.
+Commit and push the Docker Oracle container with jusr schema as a Docker image
+sha256:9ccb3b6f8e3b3929e7d5d0f6c06dbb469eaad4da27d9a68320982fcc0952447d
+The push refers to repository [docker.io/howarddeiner/imdb]
+52478a84c984: Pushed 
+29da1cbb2eba: Pushed 
+88e9a644bf76: Pushed 
+bcaa84a0d085: Mounted from library/oraclelinux 
+schema: digest: sha256:4e34dcba41de7ab807cc83a255655d4fe42ef06ea644afc9838d76e38a1d9432 size: 1168
+Create the database loader that will run in an EC2
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building testDatabaseAsCode 1.0
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ testDatabaseAsCode ---
+[INFO] Deleting /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ testDatabaseAsCode ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ testDatabaseAsCode ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 9 source files to /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ testDatabaseAsCode ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:compile (default-compile) @ testDatabaseAsCode ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ testDatabaseAsCode ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/howarddeiner/IdeaProjects/testDatabaseAsCode/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.5.1:testCompile (default-testCompile) @ testDatabaseAsCode ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.17:test (default-test) @ testDatabaseAsCode ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ testDatabaseAsCode ---
+[INFO] Building jar: /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target/testDatabaseAsCode-1.0.jar
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.1:copy-dependencies (copy-dependencies) @ testDatabaseAsCode ---
+[INFO] Copying univocity-parsers-2.7.6.jar to /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target/lib/univocity-parsers-2.7.6.jar
+[INFO] Copying ojdbc-12.2.0.1.jar to /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target/lib/ojdbc-12.2.0.1.jar
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:copy-resources (copy-resources) @ testDatabaseAsCode ---
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[WARNING] Please take a look into the FAQ: https://maven.apache.org/general.html#encoding-warning
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-shade-plugin:3.2.0:shade (default) @ testDatabaseAsCode ---
+[INFO] Including com.univocity:univocity-parsers:jar:2.7.6 in the shaded jar.
+[INFO] Including com.oracle:ojdbc:jar:12.2.0.1 in the shaded jar.
+[INFO] Replacing original artifact with shaded artifact.
+[INFO] Replacing /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target/testDatabaseAsCode-1.0.jar with /home/howarddeiner/IdeaProjects/testDatabaseAsCode/target/testDatabaseAsCode-1.0-shaded.jar
+[INFO] Dependency-reduced POM written at: /home/howarddeiner/IdeaProjects/testDatabaseAsCode/dependency-reduced-pom.xml
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4.404 s
+[INFO] Finished at: 2018-11-08T13:15:37-05:00
+[INFO] Final Memory: 32M/604M
+[INFO] ------------------------------------------------------------------------
+``
+
+Then, we Terraform the load environment, where the database is brought in from DockerHub, the files are processed, and a new image is pushed to DockerHub.
+```bash
+howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode$ cd terraform/
+howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode/terraform$ terraform apply -auto-approve
+[zillions of lines not shown]
+
+[on the terraformed machine]
+ubuntu@ip-172-31-94-68:~/data$ sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+howarddeiner/imdb   dataloaded          017d2ffc024b        10 minutes ago      1.7GB
+howarddeiner/imdb   schema              9ccb3b6f8e3b        2 hours ago         1.42GB
+
+```
+
+We can then pull that image and do our work.
+
+
+
+
 Some statistics:
 
 ```bash

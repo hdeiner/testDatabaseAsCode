@@ -16,7 +16,7 @@ sudo apt-get install -y docker-ce
 sudo docker login -u howarddeiner -p hjd001
 
 # Bring in the schema provisioned oracle image
-sudo docker run -d -p 1521:1521 -p 8080:8080 -e ORACLE_ALLOW_REMOTE=true --name IMDB howarddeiner/imdb:schema
+sudo docker run -d -p 1521:1521 -p 8080:8080 -e ORACLE_ALLOW_REMOTE=true -e ORACLE_PWD=oracle -v /u01/app/oracle/oradata --shm-size=4G --name IMDB howarddeiner/imdb:schema
 
 # Install java
 sudo apt-get install -y default-jdk

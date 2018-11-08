@@ -1,7 +1,7 @@
 resource "aws_instance" "testDatabaseAsCode_oracle" {
   count = 1
   ami = "ami-759bc50a"
-  instance_type = "c5d.9xlarge"
+  instance_type = "r5.2xlarge"
   key_name = "${aws_key_pair.testDatabaseAsCode_key_pair.key_name}"
   security_groups = ["${aws_security_group.testDatabaseAsCode_oracle.name}"]
   root_block_device {
