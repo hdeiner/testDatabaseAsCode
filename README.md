@@ -126,7 +126,19 @@ ubuntu@ip-172-31-94-68:~/data$ sudo docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 howarddeiner/imdb   dataloaded          017d2ffc024b        10 minutes ago      1.7GB
 howarddeiner/imdb   schema              9ccb3b6f8e3b        2 hours ago         1.42GB
+```
 
+Checking DockerHub at https://hub.docker.com/r/howarddeiner/imdb/tags/, we see that we have two images ready to go.  One with, and one without data.
+```bash
+PUBLIC REPOSITORY
+howarddeiner/imdb
+Last pushed: an hour ago
+
+Repo Info  Tags  Collaborators  Webhooks  Settings
+
+Tag Name    Compressed Size  Last Updated
+dataloaded  1 GB             an hour ago
+schema      889 MB           2 hours ago
 ```
 
 We can then pull that image and do our work.
