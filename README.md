@@ -131,7 +131,27 @@ howarddeiner/imdb   schema              9ccb3b6f8e3b        2 hours ago         
 
 We can then pull that image and do our work.
 
+``bash
+howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode/terraform$ sudo -S <<< "password" docker run -d -p 1521:1521 -p 8081:8080 -e ORACLE_ALLOW_REMOTE=true -e ORACLE_PWD=oracle -v /u01/app/oracle/oradata --shm-size=4G --name IMDB howarddeiner/imdb:dataloaded
+b49e8588b3dabdc96112194b05b25c95fb0a7067b2b9f76795001330ef203788
 
+howarddeiner@ubuntu:~/IdeaProjects/testDatabaseAsCode$ sqlplus system/oracle@localhost:1521/xe
+
+SQL*Plus: Release 11.2.0.1.0 Production on Thu Nov 8 15:09:14 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> select count(*) from title where primaryTitle like '%Fight%';
+
+  COUNT(*)
+----------
+       230
+
+``
 
 
 Some statistics:
